@@ -1,0 +1,28 @@
+<!-- This is the main page where a user can choose how to interact with the database -->
+
+<html>
+    <head>
+        <title>Movie Database</title>
+    </head>
+<body>
+
+<h1>Welcome to the movie database! Select your action:</h1>
+
+<form action="/new-movie/" method="GET">
+    <input type="submit" value="Add a movie" />
+</form>
+
+<form action="/edit-movie/" method="GET">
+    <input type="submit" value="Edit a movie" />
+</form>
+
+<form action="/delete-movie/" method="GET">
+    <input type="submit" value="Delete a movie" />
+</form>
+
+<form action="/review-movie/" method="GET">
+    <input type="submit" value="Review a movie" />
+</form>
+
+</body>
+</html>

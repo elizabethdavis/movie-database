@@ -1,0 +1,23 @@
+<!-- Delete confirmation of what was deleted from the database -->
+
+<html>
+    <head>
+        <title>Delete Confirmation</title>
+    </head>
+<body>
+
+<p>
+You just deleted <%= title %> from your movie database.</br>
+Want do you want to do now?
+</p>
+
+<form action="/" method="GET">
+    <input type="submit" value="Return to main" />
+</form>
+
+<form action="/delete-movie/" method="GET">
+    <input type="submit" value="Delete another movie" />
+</form>
+
+</body>
+</html>
