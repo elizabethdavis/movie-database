@@ -24,24 +24,58 @@ post '/new-movie/' do
     year = params[:year] || "0000"
     title = params[:title] || "no movie here"
 
+ begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
+        Title TEXT, Year INTEGER)"
+
+
+    #set base url for omdb api
     omdb_url = "www.omdbapi.com/?"
 
     #set search options for: title, short plot, include tomatoes ratings
-    omdb_search_options = "t=#{title}&plot=short&r=json&tomatoes=true"
+    single_omdb_search_options = "t=#{title}&plot=short&r=json&tomatoes=true"
+    single_omdb_search_options_by_id = "i=#{@id}&plot=short&r=json&tomatoes=true"
+
+    list_omdb_search_options = "s=#{title}&r=json"
 
     #combine options and base url
-    full_url = omdb_url + omdb_search_options
+    title_single_full_url = omdb_url + single_omdb_search_options
 
-    response = SimpleHttp.get full_url
+    list_full_url = omdb_url + list_omdb_search_options
 
+    # get JSON response for the search
+    response = SimpleHttp.get list_full_url
+
+
+    #turn the JSON into an object to make it easier to work with
     obj = JSON.parse(response, object_class: OpenStruct)
 
-    begin
-    	db = SQLite3::Database.open "movies.db"
-        db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
-        Title TEXT, Year INTEGER)"
-        db.execute( "INSERT INTO Movies (Title, Year) VALUES('#{title}', '#{year}')")
 
+    obj[:Search].each do |movie|
+    
+    # get id of movie item
+    id = movie['imdbID']
+    
+    # search by id 
+    single_omdb_search_options_by_id = "i=#{id}&plot=short&r=json&tomatoes=true"
+    id_single_full_url = omdb_url + single_omdb_search_options_by_id
+
+    response = SimpleHttp.get id_single_full_url 
+    
+    # ostructify JSON response
+    obj = JSON.parse(response, object_class: OpenStruct)
+    
+    # put out some fields. not all results have a tomatoRating
+    puts "Title: " + obj.Title
+    puts "Year: " + obj.Year 
+    puts "Rotten Tomatoes: " + obj.tomatoRating
+    puts "IMDB id: " + id
+end
+
+
+   
+        #db.execute( "INSERT INTO Movies (Title, Year) VALUES('#{title}', '#{year}')")
 
     erb :add_confirm, :locals => {'year' => year, 'title' => title, 'obj' => obj}
 
@@ -49,10 +83,11 @@ post '/new-movie/' do
     
     puts "Exception occurred"
     puts e
-	ensure
-	    db.close if db
-	end
+    ensure
+        db.close if db
+    end
 end
+
 
 
 
