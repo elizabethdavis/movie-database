@@ -9,6 +9,10 @@ set :static, true
 set :public_folder, "static"
 set :views, "views"
 
+db = SQLite3::Database.open "movies.db"
+db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
+        Title TEXT, Year INTEGER, Review TEXT)"
+
 get '/' do
     erb :welcome_form
 end
@@ -25,10 +29,8 @@ post '/new-movie/' do
     title = params[:title] || "no movie here"
 
  begin
-        db = SQLite3::Database.open "movies.db"
-        db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
-        Title TEXT, Year INTEGER)"
-
+    db = SQLite3::Database.open "movies.db"
+    #db.execute( "INSERT INTO Movies (Title, Year) VALUES('#{title}', '#{year}')")
 
     #set base url for omdb api
     omdb_url = "www.omdbapi.com/?"
@@ -89,38 +91,6 @@ end
 end
 
 
-
-
-#--------------------------------------------------------------------------------------
-# Edit an existing movie in the database
-#--------------------------------------------------------------------------------------
-get '/edit-movie/' do 
-    erb :edit
-end 
-
-post '/edit-movie/' do
-    title = params[:title] || "Enter Movie Title"
-    year = params[:year] || "0000"
-    new_title = params[:new_title]
-
-    begin
-        db = SQLite3::Database.open "movies.db"
-        db.transaction
-        db.execute( "UPDATE Movies SET Title='#{new_title}' WHERE Title = '#{title} AND Year='#{year}'")
-        erb :edit_confirm, :locals => {'year' => year, 'new_title' => new_title}
-        db.commit
-
-    rescue SQLite3::Exception => e 
-    
-    puts "Exception occurred"
-    puts e
-    
-    ensure
-        db.close if db
-    end
-end
-
-
 #--------------------------------------------------------------------------------------
 # Delete a movie from the database
 #--------------------------------------------------------------------------------------
@@ -130,10 +100,10 @@ end
 
 post '/delete-movie/' do
     title = params[:title] || "Enter Movie Title"
+    erb :delete_confirm, :locals => {'title' => title}
 
     begin
        	db = SQLite3::Database.open "movies.db"
-
 
     rescue SQLite3::Exception => e 
     
@@ -152,7 +122,7 @@ delete '/delete-movie/' do
      db = SQLite3::Database.open "movies.db"
      db.execute "DELETE FROM Movies WHERE Title = '#{title}'"
         puts "Your data has been deleted from the database!"
-        erb :delete_confirm, :locals => {'title' => title}
+     
 
     rescue SQLite3::Exception => e 
         
@@ -162,6 +132,8 @@ delete '/delete-movie/' do
         ensure
             db.close if db
         end
+    
+    redirect '/'
 end
 
 
@@ -169,11 +141,52 @@ end
 # Add a personal review of the movie to the database
 #--------------------------------------------------------------------------------------
 get '/review-movie/' do 
-    erb :review_form
+    erb :input_review
 end 
 
 post '/review-movie/' do
-    data = params[:data]
+    title = params[:title]
+    review = params[:review]
 
+   
+    begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute( "INSERT INTO Movies (Title, Review) VALUES('#{title}', '#{review}')")
+
+    rescue SQLite3::Exception => e 
     
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    erb :review_output, :locals => {'title' => title, 'review' => review}
+
+end
+
+#--------------------------------------------------------------------------------------
+# View movies in the database
+#--------------------------------------------------------------------------------------
+get '/view-movie/' do
+    db = params[:db]
+
+    begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute "SELECT * FROM Movies" do |row|
+            puts row
+        end
+        
+
+    rescue SQLite3::Exception => e 
+    
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    erb :view_movies
 end
