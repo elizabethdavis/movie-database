@@ -8,12 +8,15 @@
 <body>
 
 <p>
-	Movie Found! </br>
+<form action="/add/" method="POST">
+	Movies Found! </br>
 	
 	Movie Title: <%= obj.Title %></br>
 	Year: <%= obj.Year %></br>
 	Rotten Tomato Rating: <%= obj.tomatoRating %></br>
-
+	
+    <input type="submit" value="Add to my movies">
+</form>
 </p>
 
 <form action="/" method="GET">

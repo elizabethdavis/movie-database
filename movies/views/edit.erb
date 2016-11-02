@@ -5,14 +5,27 @@
     </head>
 <body>
 
-<h1>So you want to edit a movie?</h1>
-	<form action="/edit-movie/" method="POST">
-	    Old Movie Title: <input type="text" name="title"></br>
-	    Movie Year: <input type="integer" name="year"></br></br>
+<h1>Change it up!</h1>
 
-	    New Movie Title: <input type="text" name="new_title"></br>
+	<form action="/edit-movie-title/" method="POST">
+		Row ID Number: <input type="integer" name="id"></br>
+	    New Movie Title: <input type="text" name="title"></br>
 	    <input type="submit">
 	</form>
+	    
+	<form action="/edit-movie-year/" method="POST">
+		Row ID Number: <input type="integer" name="id"></br>
+		New Movie Year: <input type="integer" name="year"></br>
+	    <input type="submit">
+	</form>
+
+
+	<form action="/edit-movie-review/" method="POST">
+		Row ID Number: <input type="integer" name="id"></br>
+		New Movie Review: <input type="text" name="review"></br>
+	    <input type="submit">
+	</form>
+
 
 <form action="/" method="GET">
     <input type="submit" value="Return to main" />

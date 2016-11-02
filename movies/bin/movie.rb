@@ -11,26 +11,28 @@ set :views, "views"
 
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
-        Title TEXT, Year INTEGER, Review TEXT)"
+        Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
 
+#--------------------------------------------------------------------------------------
+# Welcome Page
+#--------------------------------------------------------------------------------------
 get '/' do
     erb :welcome_form
 end
 
 #--------------------------------------------------------------------------------------
-# Add a new movie to the database
+# Search for a new movie
 #--------------------------------------------------------------------------------------
 get '/new-movie/' do 
     erb :add
 end 
 
 post '/new-movie/' do
-    year = params[:year] || "0000"
-    title = params[:title] || "no movie here"
+    year = params[:year]
+    title = params[:title]
 
  begin
     db = SQLite3::Database.open "movies.db"
-    #db.execute( "INSERT INTO Movies (Title, Year) VALUES('#{title}', '#{year}')")
 
     #set base url for omdb api
     omdb_url = "www.omdbapi.com/?"
@@ -54,30 +56,27 @@ post '/new-movie/' do
     obj = JSON.parse(response, object_class: OpenStruct)
 
 
+    # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
-    
-    # get id of movie item
-    id = movie['imdbID']
-    
-    # search by id 
-    single_omdb_search_options_by_id = "i=#{id}&plot=short&r=json&tomatoes=true"
-    id_single_full_url = omdb_url + single_omdb_search_options_by_id
+        
+        # get id of movie item
+        id = movie['imdbID']
+        
+        # search by id 
+        single_omdb_search_options_by_id = "i=#{id}&plot=short&r=json&tomatoes=true"
+        id_single_full_url = omdb_url + single_omdb_search_options_by_id
 
-    response = SimpleHttp.get id_single_full_url 
-    
-    # ostructify JSON response
-    obj = JSON.parse(response, object_class: OpenStruct)
-    
-    # put out some fields. not all results have a tomatoRating
-    puts "Title: " + obj.Title
-    puts "Year: " + obj.Year 
-    puts "Rotten Tomatoes: " + obj.tomatoRating
-    puts "IMDB id: " + id
-end
-
-
-   
-        #db.execute( "INSERT INTO Movies (Title, Year) VALUES('#{title}', '#{year}')")
+        response = SimpleHttp.get id_single_full_url 
+        
+        # ostructify JSON response
+        obj = JSON.parse(response, object_class: OpenStruct)
+        
+        # put out some fields. not all results have a tomatoRating
+        puts "Title: " + obj.Title
+        puts "Year: " + obj.Year 
+        puts "Rotten Tomatoes: " + obj.tomatoRating
+        puts "IMDB id: " + id
+    end
 
     erb :add_confirm, :locals => {'year' => year, 'title' => title, 'obj' => obj}
 
@@ -90,6 +89,30 @@ end
     end
 end
 
+#--------------------------------------------------------------------------------------
+# Add selected movie to the database
+#--------------------------------------------------------------------------------------
+post '/add/' do
+    year = params[:year]
+    title = params[:title]
+
+    begin
+    db = SQLite3::Database.open "movies.db"
+    db.execute( "INSERT INTO Movies (Title, Year) SELECT '#{title}', '#{year}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}')")
+    puts "inserting '#{title}' into the database"
+
+    rescue SQLite3::Exception => e 
+    
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    redirect '/'
+
+end
 
 #--------------------------------------------------------------------------------------
 # Delete a movie from the database
@@ -99,7 +122,7 @@ get '/delete-movie/' do
 end 
 
 post '/delete-movie/' do
-    title = params[:title] || "Enter Movie Title"
+    title = params[:title]
     erb :delete_confirm, :locals => {'title' => title}
 
     begin
@@ -151,7 +174,7 @@ post '/review-movie/' do
    
     begin
         db = SQLite3::Database.open "movies.db"
-        db.execute( "INSERT INTO Movies (Title, Review) VALUES('#{title}', '#{review}')")
+        db.execute "UPDATE Movies SET Review='#{review}' WHERE Title='#{title}'"
 
     rescue SQLite3::Exception => e 
     
@@ -189,4 +212,71 @@ get '/view-movie/' do
     end
 
     erb :view_movies
+end
+
+#--------------------------------------------------------------------------------------
+# Edit movies in the database
+#--------------------------------------------------------------------------------------
+get '/edit-movie/' do
+    erb :edit
+end
+
+post '/edit-movie-title/' do
+    title = params[:title]
+    id = params[:id]
+
+    begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute "UPDATE Movies SET Title='#{title}' WHERE ID='#{id}'"
+
+    rescue SQLite3::Exception => e 
+    
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    redirect '/'
+end
+
+post '/edit-movie-year/' do
+    year = params[:year] 
+    id = params[:id]
+
+    begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute "UPDATE Movies SET Year='#{year}' WHERE ID='#{id}'"
+
+    rescue SQLite3::Exception => e 
+    
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    redirect '/'
+end
+
+post '/edit-movie-review/' do
+    review = params[:review]
+    id = params[:id]
+
+    begin
+        db = SQLite3::Database.open "movies.db"
+        db.execute "UPDATE Movies SET Review='#{review}' WHERE ID='#{id}'"
+
+    rescue SQLite3::Exception => e 
+    
+    puts "Exception occurred"
+    puts e
+    
+    ensure
+        db.close if db
+    end
+
+    redirect '/'
 end
