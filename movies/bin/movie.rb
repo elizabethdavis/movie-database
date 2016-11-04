@@ -3,15 +3,29 @@ require 'sqlite3'
 require 'simplehttp'
 require 'json'
 require 'ostruct'
+#require 'data_mapper'
+#require 'rubygems'
 
 set :port, 8080
 set :static, true
 set :public_folder, "static"
 set :views, "views"
 
+#DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/movies.db")
+
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
         Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
+
+#class Movie
+#    include DataMapper::Resource
+#    property :id, Serial
+#    property :Title, Text, :required => true
+#    property :Year, Integer
+#    property :Review, Text
+#    property :Tomato, Integer
+#end
+
 
 #--------------------------------------------------------------------------------------
 # Welcome Page
@@ -55,6 +69,7 @@ post '/new-movie/' do
     #turn the JSON into an object to make it easier to work with
     obj = JSON.parse(response, object_class: OpenStruct)
 
+        @all_movies = Array.new
 
     # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
@@ -70,12 +85,10 @@ post '/new-movie/' do
         
         # ostructify JSON response
         obj = JSON.parse(response, object_class: OpenStruct)
-        
-        # put out some fields. not all results have a tomatoRating
-        puts "Title: " + obj.Title
-        puts "Year: " + obj.Year 
-        puts "Rotten Tomatoes: " + obj.tomatoRating
-        puts "IMDB id: " + id
+
+        #put all obj into an array
+        @all_movies << obj
+
     end
 
     erb :add_confirm, :locals => {'year' => year, 'title' => title, 'obj' => obj}
@@ -200,7 +213,8 @@ get '/view-movie/' do
         db.execute "SELECT * FROM Movies" do |row|
             puts row
         end
-        
+        # experiment with datamapper with just this part
+        # easiest way is just to copy put datamapper at the top, make class called movie that is similar to not. to display is the get '/'
 
     rescue SQLite3::Exception => e 
     

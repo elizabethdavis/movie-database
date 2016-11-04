@@ -8,17 +8,9 @@
 <body>
 
 <p>
-	Let's watch some movies! 
-</p></br>
-	
-	<table style="width:50%">
-	  <tr>
-	    <th>Movie Title</th>
-	    <th>Year</th> 
-	    <th>Rotten Tomato Rating</th>
-	    <th>Review</th>
-	  </tr>
-	</table>
+<% @movies.each do |movie| %>
+	<%= movie.content %>
+<% end %>
 
 <form action="/" method="GET">
     <input type="submit" value="Return to main" />
