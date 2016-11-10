@@ -14,20 +14,21 @@
 <h3> Movies Found! </h3>
 
 <p>
-<!-- use the id number to create a link to click on -->
-<% @all_movies.each do |movie| %>
-	Movie Title: <%= movie.Title %> </br>
-	Year: <%= movie.Year %> </br>
-	Rotten Tomato Rating: <%= movie.tomatoRating %> </br>
-	------------------------------------------------------ </br>
+	<form action="/add/" method="POST">
+	<!-- use the id number to create a link to click on -->
+	<% @all_movies.each do |movie| %>
+		Movie Title: <%= movie.Title %> </br>
+		Year: <%= movie.Year %> </br>
+		Rated: <%= movie.Rated %> </br>
+		Genre: <%= movie.Genre %> </br>
+		Rotten Tomato Rating: <%= movie.tomatoRating %> </br>
+		Actors: <%= movie.Actors %> </br>
+		Plot: <%= movie.Plot %> </br>
+		<input type="submit" value="Add to my movies" name="id" /> </br>
+		------------------------------------------------------------------------------------------------------------ </br>
 	<% end %>
-
+	</form>
 </p>
-
-<form action="/add/" method="POST">
-	
-    <input type="submit" value="Add to my movies">
-</form>
 
 </body>
 </html>

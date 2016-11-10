@@ -3,28 +3,15 @@ require 'sqlite3'
 require 'simplehttp'
 require 'json'
 require 'ostruct'
-#require 'data_mapper'
-#require 'rubygems'
 
 set :port, 8080
 set :static, true
 set :public_folder, "static"
 set :views, "views"
 
-#DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/movies.db")
-
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
         Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
-
-#class Movie
-#    include DataMapper::Resource
-#    property :id, Serial
-#    property :Title, Text, :required => true
-#    property :Year, Integer
-#    property :Review, Text
-#    property :Tomato, Integer
-#end
 
 
 #--------------------------------------------------------------------------------------
@@ -69,7 +56,9 @@ post '/new-movie/' do
     #turn the JSON into an object to make it easier to work with
     obj = JSON.parse(response, object_class: OpenStruct)
 
-        @all_movies = Array.new
+    #initialize array
+    @all_movies = Array.new
+    @movie_id = Array.new
 
     # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
@@ -86,17 +75,18 @@ post '/new-movie/' do
         # ostructify JSON response
         obj = JSON.parse(response, object_class: OpenStruct)
 
-        #put all obj into an array
+        # put all obj into an array
         @all_movies << obj
+        @movie_id << id
 
     end
 
     erb :add_confirm, :locals => {'year' => year, 'title' => title, 'obj' => obj}
 
     rescue SQLite3::Exception => e 
+        puts "Exception occurred"
+        puts e
     
-    puts "Exception occurred"
-    puts e
     ensure
         db.close if db
     end
@@ -108,6 +98,9 @@ end
 post '/add/' do
     year = params[:year]
     title = params[:title]
+    @movie_id = params[:id]
+
+    puts @movie_id
 
     begin
     db = SQLite3::Database.open "movies.db"
@@ -139,7 +132,7 @@ post '/delete-movie/' do
     erb :delete_confirm, :locals => {'title' => title}
 
     begin
-       	db = SQLite3::Database.open "movies.db"
+        db = SQLite3::Database.open "movies.db"
 
     rescue SQLite3::Exception => e 
     
