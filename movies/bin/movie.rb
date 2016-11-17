@@ -3,11 +3,15 @@ require 'sqlite3'
 require 'simplehttp'
 require 'json'
 require 'ostruct'
+require 'sinatra/reloader'
 
 set :port, 8080
 set :static, true
 set :public_folder, "static"
 set :views, "views"
+
+# reloads the page automatically so that you don't need to shut down Sinatra each time
+register Sinatra::Reloader
 
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
@@ -58,7 +62,8 @@ post '/new-movie/' do
 
     #initialize array
     @all_movies = Array.new
-    @movie_id = Array.new
+    @movie_index = Array.new
+    @current_index = Array.new
 
     # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
@@ -77,7 +82,7 @@ post '/new-movie/' do
 
         # put all obj into an array
         @all_movies << obj
-        @movie_id << id
+        @movie_index << id
 
     end
 
@@ -95,17 +100,16 @@ end
 #--------------------------------------------------------------------------------------
 # Add selected movie to the database
 #--------------------------------------------------------------------------------------
-post '/add/' do
+get '/add/' do
     year = params[:year]
     title = params[:title]
-    @movie_id = params[:id]
-
-    puts @movie_id
+    tomato = params[:tomato]
+    id = params[:id]
 
     begin
     db = SQLite3::Database.open "movies.db"
-    db.execute( "INSERT INTO Movies (Title, Year) SELECT '#{title}', '#{year}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}')")
-    puts "inserting '#{title}' into the database"
+    db.execute( "INSERT INTO Movies (Title, Year, Tomato) SELECT '#{title}', '#{year}', '#{tomato}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}' AND Tomato = '#{tomato}')")
+    puts "inserting '#{id}' into the database"
 
     rescue SQLite3::Exception => e 
     
@@ -115,8 +119,6 @@ post '/add/' do
     ensure
         db.close if db
     end
-
-    redirect '/'
 
 end
 
@@ -161,8 +163,6 @@ delete '/delete-movie/' do
         ensure
             db.close if db
         end
-    
-    redirect '/'
 end
 
 
@@ -199,7 +199,7 @@ end
 # View movies in the database
 #--------------------------------------------------------------------------------------
 get '/view-movie/' do
-    db = params[:db]
+    
 
     begin
         db = SQLite3::Database.open "movies.db"
