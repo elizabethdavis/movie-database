@@ -3,7 +3,7 @@
 <html>
     <head>
         <title>Adding to the Database</title>
-        <link rel="stylesheet" type="text/css" href="styles/style.css">
+        <link href="/style.css" rel="stylesheet"> 
     </head>
 <body>
 
@@ -25,7 +25,8 @@
 		Actors: <%= movie.Actors %> </br>
 		Plot: <%= movie.Plot %> </br>
 		<%= @movie_index %> </br>
-		<input type="submit" value="Add to my movies" /> </br>
+		<!-- need to get the number that it is listed (0..9) -->
+		<input type="submit" value="Add to my movies" id='id'/> </br>
 		------------------------------------------------------------------------------------------------------------ </br>
 	<% end %>
 	</form>

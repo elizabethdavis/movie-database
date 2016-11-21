@@ -63,7 +63,6 @@ post '/new-movie/' do
     #initialize array
     @all_movies = Array.new
     @movie_index = Array.new
-    @current_index = Array.new
 
     # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
@@ -200,15 +199,12 @@ end
 #--------------------------------------------------------------------------------------
 get '/view-movie/' do
     
-
     begin
         db = SQLite3::Database.open "movies.db"
         db.execute "SELECT * FROM Movies" do |row|
             puts row
         end
-        # experiment with datamapper with just this part
-        # easiest way is just to copy put datamapper at the top, make class called movie that is similar to not. to display is the get '/'
-
+       
     rescue SQLite3::Exception => e 
     
     puts "Exception occurred"
@@ -287,3 +283,7 @@ post '/edit-movie-review/' do
 
     redirect '/'
 end
+
+#--------------------------------------------------------------------------------------
+# End of code
+#--------------------------------------------------------------------------------------
