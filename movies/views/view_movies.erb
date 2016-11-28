@@ -3,11 +3,25 @@
 <html>
     <head>
         <title>Viewing the Database</title>
+        <link href = "/reset.css" rel="stylesheet">
         <link href="/style.css" rel="stylesheet"> 
     </head>
 <body>
-
-
+	<h1> The movies </h1>
+<table style="width: 100%; text-align: center;">
+	<tr>
+		<th>Movie Title</th>
+		<th>Year</th>
+		<th>Review</th>
+	</tr>
+<% @movies.each do |movie| %>
+	<tr>
+		<td><%= movie[1] %></td>
+		<td><%= movie[2] %></td>
+		<td><%= movie[3] %></td>
+	</tr>
+<% end %>
+</table>
 
 <form action="/" method="GET">
     <input type="submit" value="<< Return to main" />
