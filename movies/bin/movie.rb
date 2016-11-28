@@ -13,6 +13,8 @@ set :views, "views"
 # reloads the page automatically so that you don't need to shut down Sinatra each time
 register Sinatra::Reloader
 
+#@movies = Array.new  #array to capture movies from database
+
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
         Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
@@ -198,11 +200,12 @@ end
 # View movies in the database
 #--------------------------------------------------------------------------------------
 get '/view-movie/' do
-    
+    @movies = Array.new 
     begin
         db = SQLite3::Database.open "movies.db"
         db.execute "SELECT * FROM Movies" do |row|
             puts row
+            @movies << row 
         end
        
     rescue SQLite3::Exception => e 
