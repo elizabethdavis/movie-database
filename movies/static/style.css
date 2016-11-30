@@ -1,0 +1,202 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	display: block;
+	/*background-image: url('http://www.siwallpaperhd.com/wp-content/uploads/2015/11/frozen_full_hd_wallpaper.jpg');*/
+	background-position: auto;
+}
+
+.main-movie {
+	background-color: #fff;
+	opacity: 0.2;
+}
+
+header {
+	text-align: center;
+	margin: 0 0 20px;
+}
+
+h1 {
+	text-align: center;
+	display: inline;
+	font-size: 64px;
+	color: black;
+}
+
+header h1 a:link, header h1 a:visited {
+	color: #444;
+	text-decoration: none;
+}
+
+header h2 {
+	text-align: center;
+	font-size: 16px;
+	font-style: italic;
+	color: #999;
+}
+
+h3 {
+	text-align: center;
+}
+
+table {
+	border: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	width: 100%;
+	text-align: center;
+}
+
+    th.sortable
+    {
+        color: #666;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+        th.sortable:hover
+        {
+            color: black;
+        }
+
+    th.sorted-asc, th.sorted-desc
+    {
+        color: black;
+        background-color: cadetblue;
+    }
+
+#main {
+	margin: 0 0 20px;
+}
+
+#add {
+	margin: 0 0 20px;
+}
+
+#add textarea {
+	height: 30px;
+	width: 510px;
+	padding: 10px;
+	border: 1px solid #ddd;
+}
+
+#add input {
+	height: 50px;
+	width: 100px;
+	margin: -50px 0 0;
+	border: 1px solid #ddd;
+	background-image: url("/images/search.png");
+}
+
+#edit textarea {
+	height: 30px;
+	width: 480px;
+	padding: 10px;
+	border: 1px solid #ddd;
+}
+
+/******************************************************************/
+/* style for the buttons */
+div.home-buttons {
+	width: 220px;
+    height: 100px; 
+    padding-left: 30px;
+    display: -webkit-flex; /* Safari */
+    -webkit-align-items: center; /* Safari 7.0+ */
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+
+}
+
+div.home-container {
+	margin-left: 300px;
+	margin-top: 20px;
+	max-width: 700px;
+	background-color: #fff;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+}
+
+input[type=submit] {
+	height: 30px;
+	width: 100px;
+	border: 1px solid black;
+	display: inline;
+}
+
+/******************************************************************/
+
+/*****************************************************************/
+/* Movie Header Styles */
+div.movie-background {
+	opacity: 1;
+	padding-left: 200px;
+	max-width: 800px;
+	margin-top: 20px;
+	margin-left: 70px;
+	margin-right: 70px;
+	padding-bottom: 30px;
+	padding-top: 30px;
+	margin-bottom: 30px;
+}
+
+div.box {
+	margin-bottom: 30px;
+	background-color: #fff;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+	padding-bottom: 0.5px;
+}
+
+div.box h1 {
+	margin: 5%;
+	padding-top: 10px;
+	font-weight: bold;
+	color: #000;
+}
+
+div.box h2 {
+	margin: 5%;
+	color: #000;
+	padding-bottom: 5px;
+}
+
+/*****************************************************************/
+
+input[type=text] {
+    background-color: white;
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+form {
+	margin-left: 20px;
+}
+
+p {
+	margin: 0 0 5px;
+}
+
+.meta {
+	font-size: 0.8em;
+	font-style: italic;
+	color: #888;
+}
+
+.links {
+	font-size: 1.8em;
+	line-height: 0.8em;
+	float: right;
+	margin: -10px 0 0;
+}
+
+.links a {
+	display: block;
+	text-decoration: none;
+}
+
+#js {
+	background-position: center;
+}

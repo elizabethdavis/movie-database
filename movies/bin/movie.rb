@@ -13,12 +13,16 @@ set :views, "views"
 # reloads the page automatically so that you don't need to shut down Sinatra each time
 register Sinatra::Reloader
 
-#@movies = Array.new  #array to capture movies from database
-
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
         Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
+        
+#initialize arrays
+configure do
+     @@all_movies = Array.new
+     @@movie_index = Array.new
 
+end 
 
 #--------------------------------------------------------------------------------------
 # Welcome Page
@@ -61,10 +65,11 @@ post '/new-movie/' do
 
     #turn the JSON into an object to make it easier to work with
     obj = JSON.parse(response, object_class: OpenStruct)
+    
+    # clear arrays
+	@@all_movies.clear
+    @@movie_index.clear 
 
-    #initialize array
-    @all_movies = Array.new
-    @movie_index = Array.new
 
     # access all movies that have the search phrase in their title
     obj[:Search].each do |movie|
@@ -72,6 +77,7 @@ post '/new-movie/' do
         # get id of movie item
         id = movie['imdbID']
         
+                
         # search by id 
         single_omdb_search_options_by_id = "i=#{id}&plot=short&r=json&tomatoes=true"
         id_single_full_url = omdb_url + single_omdb_search_options_by_id
@@ -81,9 +87,9 @@ post '/new-movie/' do
         # ostructify JSON response
         obj = JSON.parse(response, object_class: OpenStruct)
 
-        # put all obj into an array
-        @all_movies << obj
-        @movie_index << id
+        # put all obj into an array 
+        @@all_movies << obj
+        @@movie_index << id
 
     end
 
@@ -101,25 +107,28 @@ end
 #--------------------------------------------------------------------------------------
 # Add selected movie to the database
 #--------------------------------------------------------------------------------------
-get '/add/' do
-    year = params[:year]
-    title = params[:title]
-    tomato = params[:tomato]
-    id = params[:id]
+post '/add/' do
+    
+    id = params[:array_index]
+     
+	year = @@all_movies[id.to_i]['Year']
+	title = @@all_movies[id.to_i]['Title']
+	tomato = @@all_movies[id.to_i]['tomatoRating']
+	
 
     begin
-    db = SQLite3::Database.open "movies.db"
-    db.execute( "INSERT INTO Movies (Title, Year, Tomato) SELECT '#{title}', '#{year}', '#{tomato}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}' AND Tomato = '#{tomato}')")
-    puts "inserting '#{id}' into the database"
+        db = SQLite3::Database.open "movies.db"
+        db.execute( "INSERT INTO Movies (Title, Year, Tomato) SELECT '#{title}', '#{year}', '#{tomato}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}' AND Tomato = '#{tomato}')")
 
     rescue SQLite3::Exception => e 
-    
-    puts "Exception occurred"
-    puts e
+        puts "Exception occurred"
+        puts e
     
     ensure
         db.close if db
     end
+    
+    redirect '/'
 
 end
 
@@ -132,7 +141,6 @@ end
 
 post '/delete-movie/' do
     title = params[:title]
-    erb :delete_confirm, :locals => {'title' => title}
 
     begin
         db = SQLite3::Database.open "movies.db"
@@ -164,6 +172,9 @@ delete '/delete-movie/' do
         ensure
             db.close if db
         end
+
+    erb :delete_confirm, :locals => {'title' => title}
+    
 end
 
 

@@ -14,9 +14,12 @@
 <h3> Movies Found! </h3>
 
 <p>
-	<form action="/add/" method="GET">
+	<form>
 	<!-- pass the id to identify which movie to add -->
-	<% @all_movies.each do |movie| %>
+	<% index = 0 %>
+	
+	<% @@all_movies.each do |movie| %>
+		
 		Movie Title: <%= movie.Title %> </br>
 		Year: <%= movie.Year %> </br>
 		Rated: <%= movie.Rated %> </br>
@@ -24,12 +27,15 @@
 		Rotten Tomato Rating: <%= movie.tomatoRating %> </br>
 		Actors: <%= movie.Actors %> </br>
 		Plot: <%= movie.Plot %> </br>
-		<%= @movie_index %> </br>
-		<!-- need to get the number that it is listed (0..9) -->
-		<input type="submit" value="Add to my movies" id='id'/> </br>
+		
+		<input type = "hidden" name="array_index" value="<%= index %>"/>
+		<input type="submit" value="Add to my movies" id='add'/> </br>
+
 		------------------------------------------------------------------------------------------------------------ </br>
-	<% end %>
+
 	</form>
+			<% index += 1%>
+		<% end %>
 </p>
 
 </body>
