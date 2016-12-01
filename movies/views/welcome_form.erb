@@ -11,7 +11,7 @@
     		select_image = movie_image_array[Math.floor(Math.random() * movie_image_array.length)];
 
 			document.body.style.backgroundImage = 'url(' + select_image + ')';
-			document.body.style.backgroundSize = "contain";
+			document.body.style.backgroundSize = "cover";
         </script>
     </head>
 <body>
@@ -30,8 +30,8 @@
 	    <input type="submit" value="Review a movie" />
 	</form>
 
-	<form action="/edit-movie/" method="GET">
-	    <input type="submit" value="Edit a movie" />
+	<form action="/edit-review/" method="GET">
+	    <input type="submit" value="Edit a review" />
 	</form>
 
 	<form action="/view-movie/" method="GET">

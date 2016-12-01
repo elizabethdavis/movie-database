@@ -5,27 +5,15 @@
     </head>
 <body>
 
-<h1>Want to change something?</h1>
-
-	<form action="/edit-movie-title/" method="POST">
-		Row ID Number: <input type="integer" name="id"></br>
-	    New Movie Title: <input type="text" name="title"></br>
-	    <input type="submit">
-	</form>
-	    
-	<form action="/edit-movie-year/" method="POST">
-		Row ID Number: <input type="integer" name="id"></br>
-		New Movie Year: <input type="integer" name="year"></br>
-	    <input type="submit">
-	</form>
-
+<div class="review">
+<h2>Edit Review</h2>
 
 	<form action="/edit-movie-review/" method="POST">
-		Row ID Number: <input type="integer" name="id"></br>
-		New Movie Review: <input type="text" name="review"></br>
-	    <input type="submit">
+		<input type="text" name="title" placeholder="Movie Title"></br>
+		<input type="text" name="review" placeholder="New Review"></br></br>
+	    <input type="submit"></br></br>
 	</form>
-
+</div>
 
 <form action="/" method="GET">
     <input type="submit" value="<< Return to main" />

@@ -13,11 +13,13 @@ set :views, "views"
 # reloads the page automatically so that you don't need to shut down Sinatra each time
 register Sinatra::Reloader
 
+#@movies = Array.new  #array to capture movies from database
+
 db = SQLite3::Database.open "movies.db"
 db.execute "CREATE TABLE IF NOT EXISTS Movies(Id INTEGER PRIMARY KEY, 
         Title TEXT, Year INTEGER, Review TEXT, Tomato INTEGER)"
         
-#initialize arrays
+         #initialize arrays
 configure do
      @@all_movies = Array.new
      @@movie_index = Array.new
@@ -67,7 +69,8 @@ post '/new-movie/' do
     obj = JSON.parse(response, object_class: OpenStruct)
     
     # clear arrays
-	@@all_movies.clear
+    
+    @@all_movies.clear
     @@movie_index.clear 
 
 
@@ -87,7 +90,9 @@ post '/new-movie/' do
         # ostructify JSON response
         obj = JSON.parse(response, object_class: OpenStruct)
 
-        # put all obj into an array 
+        # put all obj into an array
+        
+        
         @@all_movies << obj
         @@movie_index << id
 
@@ -108,21 +113,26 @@ end
 # Add selected movie to the database
 #--------------------------------------------------------------------------------------
 post '/add/' do
+#     year = params[:year]
+#     title = params[:title]
+#     tomato = params[:tomato]
     
     id = params[:array_index]
      
-	year = @@all_movies[id.to_i]['Year']
-	title = @@all_movies[id.to_i]['Title']
-	tomato = @@all_movies[id.to_i]['tomatoRating']
-	
+    year = @@all_movies[id.to_i]['Year']
+    title = @@all_movies[id.to_i]['Title']
+    tomato = @@all_movies[id.to_i]['tomatoRating']
+    
 
     begin
-        db = SQLite3::Database.open "movies.db"
-        db.execute( "INSERT INTO Movies (Title, Year, Tomato) SELECT '#{title}', '#{year}', '#{tomato}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}' AND Tomato = '#{tomato}')")
+    db = SQLite3::Database.open "movies.db"
+    db.execute( "INSERT INTO Movies (Title, Year, Tomato) SELECT '#{title}', '#{year}', '#{tomato}' WHERE NOT EXISTS(SELECT * FROM Movies WHERE Title = '#{title}' AND Year = '#{year}' AND Tomato = '#{tomato}')")
+    puts "inserting '#{id}' into the database"
 
     rescue SQLite3::Exception => e 
-        puts "Exception occurred"
-        puts e
+    
+    puts "Exception occurred"
+    puts e
     
     ensure
         db.close if db
@@ -174,7 +184,7 @@ delete '/delete-movie/' do
         end
 
     erb :delete_confirm, :locals => {'title' => title}
-    
+
 end
 
 
@@ -234,57 +244,17 @@ end
 #--------------------------------------------------------------------------------------
 # Edit movies in the database
 #--------------------------------------------------------------------------------------
-get '/edit-movie/' do
+get '/edit-review/' do
     erb :edit
-end
-
-post '/edit-movie-title/' do
-    title = params[:title]
-    id = params[:id]
-
-    begin
-        db = SQLite3::Database.open "movies.db"
-        db.execute "UPDATE Movies SET Title='#{title}' WHERE ID='#{id}'"
-
-    rescue SQLite3::Exception => e 
-    
-    puts "Exception occurred"
-    puts e
-    
-    ensure
-        db.close if db
-    end
-
-    redirect '/'
-end
-
-post '/edit-movie-year/' do
-    year = params[:year] 
-    id = params[:id]
-
-    begin
-        db = SQLite3::Database.open "movies.db"
-        db.execute "UPDATE Movies SET Year='#{year}' WHERE ID='#{id}'"
-
-    rescue SQLite3::Exception => e 
-    
-    puts "Exception occurred"
-    puts e
-    
-    ensure
-        db.close if db
-    end
-
-    redirect '/'
 end
 
 post '/edit-movie-review/' do
     review = params[:review]
-    id = params[:id]
+    title = params[:title]
 
     begin
         db = SQLite3::Database.open "movies.db"
-        db.execute "UPDATE Movies SET Review='#{review}' WHERE ID='#{id}'"
+        db.execute "UPDATE Movies SET Review='#{review}' WHERE Title='#{title}'"
 
     rescue SQLite3::Exception => e 
     
