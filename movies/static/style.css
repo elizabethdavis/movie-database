@@ -1,3 +1,6 @@
+/*****************************************************************/
+/*                       General styles 					     */
+/*****************************************************************/
 html, body {
 	height: 100%;
 	width: 100%;
@@ -20,7 +23,7 @@ h1 {
 	text-align: center;
 	display: inline;
 	font-size: 64px;
-	color: black;
+	color: #999;
 }
 
 header h1 a:link, header h1 a:visited {
@@ -39,7 +42,7 @@ h3 {
 }
 
 #main {
-	margin: 0 0 20px;
+	margin: 0 0 10px;
 }
 
 #add {
@@ -68,28 +71,31 @@ h3 {
 	border: 1px solid #ddd;
 }
 
-/******************************************************************/
-/* style for the buttons */
+/*****************************************************************/
+/*                       Button styles 					         */
+/*****************************************************************/
 div.home-buttons {
 	width: 220px;
     height: 100px; 
-    padding-left: 100px;
+    padding-left: 90px;
     display: -webkit-flex; /* Safari */
     -webkit-align-items: center; /* Safari 7.0+ */
     display: flex;
     align-items: center;
     background-color: #fff;
     border-radius: 25px;
+    padding-right: 15px;
 
 }
 
 div.home-container {
-	margin-left: 300px;
+	margin-left: 320px;
 	margin-top: 20px;
 	max-width: 700px;
 	background-color: #fff;
-	opacity: 0.6;
+	opacity: 0.7;
 	filter: alpha(opacity=60);
+	border-radius: 25px;
 }
 
 input[type=submit] {
@@ -97,82 +103,134 @@ input[type=submit] {
 	width: auto;
 	border: 1px solid black;
 	display: inline;
+	border-radius: 15px;
+	margin-right: 20px;
 }
 
-/******************************************************************/
+input[type="submit"]:hover {
+    border: 1px solid #fff;
+    background-color: #99ccff;
+    color: #fff;
+}
 
 /*****************************************************************/
-/* Movie Header Styles */
-div.movie-background {
-	opacity: 1;
+/*                  Movie header styles 					     */
+/*****************************************************************/
+div.header-background {
 	padding-left: 200px;
 	max-width: 800px;
 	margin-top: 20px;
 	margin-left: 70px;
 	margin-right: 70px;
-	padding-bottom: 30px;
+	padding-bottom: 15px;
 	padding-top: 30px;
-	margin-bottom: 30px;
+	margin-bottom: 15px;
 }
 
 div.box {
-	margin-bottom: 30px;
+	margin-bottom: 0px;
 	background-color: #fff;
 	opacity: 0.6;
 	filter: alpha(opacity=60);
 	padding-bottom: 0.5px;
+	border-radius: 25px;
+}
+
+div.box:hover {
+	background-color: #333;
+	opacity: 0.6;
+	border: 3px solid #fff;
 }
 
 div.box h1 {
 	margin: 5%;
-	padding-top: 10px;
+	padding-top: 20px;
 	font-weight: bold;
 	color: #000;
+}
+
+div.box:hover h1 {
+	color: #fff;
 }
 
 div.box h2 {
 	margin: 5%;
 	color: #000;
-	padding-bottom: 5px;
+	padding-bottom: 0px;
+}
+
+div.box:hover h2 {
+	color: #fff;
 }
 
 /*****************************************************************/
-
+/*                View movie table styles 					     */
+/*****************************************************************/
 div.data-contain {
-	background-color: #333;
-	filter: alpha(opacity=60);
-	padding-bottom: 0.5px;
+	padding-bottom: 10px;
+	padding-left: 280px;
 }
 
-div.input-container {
+div.data-contain h2 {
+	color: #fff;
+	text-align: center;
+	padding-right: 250px;
+}
+
+div.data-table {
+	background-color: #fff;
+}
+
+/* Sortable tables */
+table.sortable thead {
+    background-color:#a8a8a8;
+    color:#ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+table {
+	border: 1px solid black;
 	background-color: #fff;
 	text-align: center;
 }
 
-div.button-actions {
-	padding-bottom: 20px;
-}
-
-
-div.review {
-	align-content: center;
+/*****************************************************************/
+/*                  Form button styles 					         */
+/*****************************************************************/
+div.input-container {
+	background-color: #fff;
 	text-align: center;
-	padding-left: 100px;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	margin-top: 15px;
+	border-radius: 25px;
+	max-width: 800px;
+	margin-left: 270px;
+	opacity: 0.7;
 }
 
 input[type=text] {
     background-color: white;
-    background-position: 10px 10px; 
     background-repeat: no-repeat;
 }
 
-form {
+div.search-findings p {
+	margin-right: 20px;
 	margin-left: 20px;
-	background-color: #000;
 }
 
-p {
-	margin: 0 0 5px;
+div.search-findings {
+	background-color: #fff;
+	text-align: center;
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	padding-top: 15px;
+	margin-top: 15px;
+	border-radius: 25px;
+	max-width: 800px;
+	margin-left: 270px;
 }
 
 p.confirmation {
@@ -192,24 +250,14 @@ p.confirmation {
 	margin: -10px 0 0;
 }
 
-.links a {
-	display: block;
+a {
 	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
 }
 
 #js {
 	background-position: center;
-}
-
-/* Sortable tables */
-table.sortable thead {
-    background-color:#000;
-    color:#666666;
-    font-weight: bold;
-    cursor: default;
-}
-
-table {
-	border: 1px solid black;
-	background-color: #fff9db;
 }
