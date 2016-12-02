@@ -17,10 +17,10 @@ Instructions for Use:
 - The searching feature is searching the interwebs, so it may take a few extra seconds.
 
 To Run the file:
-- Download the directory 'movies'
-- Navigate to the folder in your favorite terminal command prompt
-- Run the ruby file 'movies.rb' by typing 'ruby bin/movies.rb'
-- Open http://localhost:8080/ in your preferred browser
+- Download the directory 'movies'.
+- Navigate to the folder in your favorite terminal command prompt.
+- Run the ruby file 'movies.rb' by typing 'ruby bin/movies.rb'.
+- Open http://localhost:8080/ in your preferred browser.
 - Enjoy!
 
 Last modified: December 2nd, 2016.
