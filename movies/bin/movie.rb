@@ -136,7 +136,7 @@ post '/add/' do
         db.close if db
     end
     
-    erb :add_confirm
+    erb :add_movie, :locals => {'title' => title}
 
 end
 
@@ -236,33 +236,6 @@ get '/view-movie/' do
     end
 
     erb :view_movies
-end
-
-#--------------------------------------------------------------------------------------
-# Edit movies in the database
-#--------------------------------------------------------------------------------------
-get '/edit-review/' do
-    erb :edit
-end
-
-post '/edit-movie-review/' do
-    review = params[:review]
-    title = params[:title]
-
-    begin
-        db = SQLite3::Database.open "movies.db"
-        db.execute "UPDATE Movies SET Review='#{review}' WHERE Title='#{title}'"
-
-    rescue SQLite3::Exception => e 
-    
-    puts "Exception occurred"
-    puts e
-    
-    ensure
-        db.close if db
-    end
-
-    redirect '/'
 end
 
 #--------------------------------------------------------------------------------------
