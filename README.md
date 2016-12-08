@@ -23,4 +23,6 @@ To Run the file:
 - Open http://localhost:8080/ in your preferred browser.
 - Enjoy!
 
-Last modified: December 2nd, 2016.
+Presentation Slides: https://docs.google.com/presentation/d/1lmpmXY7Uug6QBq45jcgQLjWCHGtvsINphWMShlELzug/edit?usp=sharing
+
+Last modified: December 8th, 2016.
