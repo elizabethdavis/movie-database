@@ -1,9 +1,9 @@
 # An Interactive Movie Database
-Final project for Dynamic Web Applications.
+Class Project: Dynamic Web Applications
 
 ![harry-potter](http://static3.businessinsider.com/image/53ed262decad04b968a65d80/harry-potter-gets-wand.gif)
 
-Project Features:
+Application Features:
 - Search for movies. 
 - Add selected movie to personal database.
 - Delete movies from the database.
